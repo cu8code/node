@@ -3577,12 +3577,15 @@ The [`util.toUSVString()`][] API is deprecated. Please use
 
 <!-- YAML
 changes:
+  - version: REPLACEME
+    pr-url: https://github.com/nodejs/node/pull/49686
+    description: Runtime deprecation.
   - version: v20.8.0
     pr-url: https://github.com/nodejs/node/pull/49683
     description: Documentation-only deprecation.
 -->
 
-Type: Documentation-only
+Type: Runtime
 
 `F_OK`, `R_OK`, `W_OK` and `X_OK` getters exposed directly on `node:fs` are
 deprecated. Get them from `fs.constants` or `fs.promises.constants` instead.
@@ -3615,6 +3618,9 @@ Please use `value instanceof WebAssembly.Module` instead.
 
 <!-- YAML
 changes:
+  - version: REPLACEME
+    pr-url: https://github.com/nodejs/node/pull/55548
+    description: End-of-Life.
   - version: v23.0.0
     pr-url: https://github.com/nodejs/node/pull/51050
     description: Runtime deprecation.
@@ -3626,9 +3632,9 @@ changes:
     description: Documentation-only deprecation.
 -->
 
-Type: Runtime
+Type: End-of-Life
 
-The [`dirent.path`][] is deprecated due to its lack of consistency across
+The `dirent.path` property has been removed due to its lack of consistency across
 release lines. Please use [`dirent.parentPath`][] instead.
 
 ### DEP0179: `Hash` constructor
@@ -3731,6 +3737,9 @@ and [`crypto.setEngine()`][] all depend on this functionality from OpenSSL.
 
 <!-- YAML
 changes:
+  - version: REPLACEME
+    pr-url: https://github.com/nodejs/node/pull/55718
+    description: Runtime deprecation.
   - version:
     - v22.9.0
     - v20.18.0
@@ -3738,7 +3747,7 @@ changes:
     description: Documentation-only deprecation.
 -->
 
-Type: Documentation-only
+Type: Runtime
 
 Instantiating classes without the `new` qualifier exported by the `node:zlib` module is deprecated.
 It is recommended to use the `new` qualifier instead. This applies to all Zlib classes, such as `Deflate`,
@@ -3765,6 +3774,47 @@ It is recommended to use the `new` qualifier instead. This applies to all REPL c
 `REPLServer` and `Recoverable`.
 
 <!-- md-lint skip-deprecation DEP0186 -->
+
+### DEP0187: Passing invalid argument types to `fs.existsSync`
+
+<!-- YAML
+changes:
+  - version: REPLACEME
+    pr-url: https://github.com/nodejs/node/pull/55892
+    description: Documentation-only.
+-->
+
+Type: Documentation-only
+
+Passing non-supported argument types is deprecated and, instead of returning `false`,
+will throw an error in a future version.
+
+### DEP0188: `process.features.ipv6` and `process.features.uv`
+
+<!-- YAML
+changes:
+  - version: REPLACEME
+    pr-url: https://github.com/nodejs/node/pull/55545
+    description: Documentation-only deprecation.
+-->
+
+Type: Documentation-only
+
+These properties are unconditionally `true`. Any checks based on these properties are redundant.
+
+### DEP0189: `process.features.tls_*`
+
+<!-- YAML
+changes:
+  - version: REPLACEME
+    pr-url: https://github.com/nodejs/node/pull/55545
+    description: Documentation-only deprecation.
+-->
+
+Type: Documentation-only
+
+`process.features.tls_alpn`, `process.features.tls_ocsp`, and `process.features.tls_sni` are
+deprecated, as their values are guaranteed to be identical to that of `process.features.tls`.
 
 [NIST SP 800-38D]: https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-38d.pdf
 [RFC 6066]: https://tools.ietf.org/html/rfc6066#section-3
@@ -3813,7 +3863,6 @@ It is recommended to use the `new` qualifier instead. This applies to all REPL c
 [`diagnostics_channel.subscribe(name, onMessage)`]: diagnostics_channel.md#diagnostics_channelsubscribename-onmessage
 [`diagnostics_channel.unsubscribe(name, onMessage)`]: diagnostics_channel.md#diagnostics_channelunsubscribename-onmessage
 [`dirent.parentPath`]: fs.md#direntparentpath
-[`dirent.path`]: fs.md#direntpath
 [`dns.lookup()`]: dns.md#dnslookuphostname-options-callback
 [`dnsPromises.lookup()`]: dns.md#dnspromiseslookuphostname-options
 [`domain`]: domain.md

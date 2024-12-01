@@ -284,8 +284,8 @@ You can integrate the PRs into the proposal without running full CI.
 
 ⚠️ At this point, you can either run `git node release --prepare`:
 
-```console
-$ git node release --prepare x.y.z
+```bash
+git node release -S --prepare x.y.z
 ```
 
 to automate the remaining steps until step 6 or you can perform it manually
@@ -310,6 +310,9 @@ branched off of `vN.x`.
 $ git checkout -b v1.2.3-proposal upstream/v1.x
 git cherry-pick  ...  # cherry-pick nodejs-private PR commits directly into the proposal
 ```
+
+Be sure to label the CVE fixes as `notable-change` in the nodejs-private repository.
+This will ensure they are included in the "Notable Changes" section of the CHANGELOG.
 
 </details>
 
@@ -704,12 +707,23 @@ the build before moving forward. Use the following list as a baseline:
 
 ### 11. Tag and sign the release commit
 
-Once you have produced builds that you're happy with, create a new tag. By
-waiting until this stage to create tags, you can discard a proposed release if
-something goes wrong or additional commits are required. Once you have created a
-tag and pushed it to GitHub, you _**must not**_ delete and re-tag. If you make
-a mistake after tagging then you'll have to version-bump and start again and
-count that tag/version as lost.
+Once you have produced builds that you're happy with you can either run
+`git node release --promote`
+
+```bash
+git node release -S --promote https://github.com/nodejs/node/pull/XXXX
+```
+
+to automate the remaining steps until step 16 or you can perform it manually
+following the below steps.
+
+***
+
+Create a new tag: By waiting until this stage to create tags, you can discard
+a proposed release if something goes wrong or additional commits are required.
+Once you have created a tag and pushed it to GitHub, you _**must not**_ delete
+and re-tag. If you make a mistake after tagging then you'll have to version-bump
+and start again and count that tag/version as lost.
 
 Tag summaries have a predictable format. Look at a recent tag to see:
 
@@ -1368,6 +1382,42 @@ to point to the most recently activated LTS. A member of the Node.js Build
 Infrastructure team is able to perform the switch of the default. An issue
 should be opened on the [Node.js Snap management repository][] requesting this
 take place once a new LTS line has been released.
+
+## FAQ
+
+Due to how `tools/release.sh` work, it isn't uncommon to face some errors
+during the promotion process as it depends on network communication and machine
+availability. This section aims to guide the releaser through potential
+failures.
+
+### Error on dist-indexer while promoting
+
+```bash
+node:events:491
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: read ECONNRESET
+    at TLSWrap.onStreamRead (node:internal/stream_base_commons:217:20)
+Emitted 'error' event on DestroyableTransform instance at:
+    at ClientRequest.<anonymous> (/usr/lib/node_modules/nodejs-dist-indexer/node_modules/hyperquest/index.js:14:19)
+    at ClientRequest.emit (node:events:513:28)
+    at TLSSocket.socketErrorListener (node:_http_client:494:9)
+    at TLSSocket.emit (node:events:513:28)
+    at emitErrorNT (node:internal/streams/destroy:157:8)
+    at emitErrorCloseNT (node:internal/streams/destroy:122:3)
+    at processTicksAndRejections (node:internal/process/task_queues:83:21) {
+  errno: -104,
+  code: 'ECONNRESET',
+  syscall: 'read'
+}
+```
+
+Typical resolution: sign the release again.
+
+```bash
+./tools/release.sh -s vX.Y.Z
+```
 
 [Build issue tracker]: https://github.com/nodejs/build/issues/new
 [CI lockdown procedure]: https://github.com/nodejs/build/blob/HEAD/doc/jenkins-guide.md#restricting-access-for-security-releases

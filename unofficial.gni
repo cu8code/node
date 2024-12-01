@@ -91,7 +91,7 @@ template("node_gn_build") {
     if (current_cpu == "x86") {
       node_arch = "ia32"
     } else {
-      node_arch = current_cpu
+      node_arch = target_cpu
     }
     if (target_os == "win") {
       node_platform = "win32"
@@ -185,7 +185,7 @@ template("node_gn_build") {
     }
     if (node_use_openssl) {
       deps += [ "deps/ncrypto" ]
-      public_deps += [ "deps/openssl" ]
+      public_deps += [ "$node_openssl_path" ]
       sources += gypi_values.node_crypto_sources
     }
     if (node_enable_inspector) {

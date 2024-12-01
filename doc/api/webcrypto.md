@@ -577,6 +577,7 @@ changes:
   - version:
     - v22.5.0
     - v20.17.0
+    - v18.20.5
     pr-url: https://github.com/nodejs/node/pull/53601
     description: The length parameter is now optional for `'ECDH'`, `'X25519'`,
                  and `'X448'`.
@@ -599,9 +600,6 @@ changes:
 Using the method and parameters specified in `algorithm` and the keying
 material provided by `baseKey`, `subtle.deriveBits()` attempts to generate
 `length` bits.
-
-The Node.js implementation requires that `length`, when a number, is a multiple
-of `8`.
 
 When `length` is not provided or `null` the maximum number of bits for a given
 algorithm is generated. This is allowed for the `'ECDH'`, `'X25519'`, and `'X448'`

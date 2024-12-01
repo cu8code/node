@@ -208,30 +208,18 @@ The valid arguments for the `--allow-fs-read` flag are:
 * Multiple paths can be allowed using multiple `--allow-fs-read` flags.
   Example `--allow-fs-read=/folder1/ --allow-fs-read=/folder1/`
 
-Paths delimited by comma (`,`) are no longer allowed.
-When passing a single flag with a comma a warning will be displayed.
-
 Examples can be found in the [File System Permissions][] documentation.
-
-Relative paths are NOT yet supported by the CLI flag.
 
 The initializer module also needs to be allowed. Consider the following example:
 
 ```console
-$ node --experimental-permission t.js
-node:internal/modules/cjs/loader:162
-  const result = internalModuleStat(receiver, filename);
-                 ^
+$ node --experimental-permission index.js
 
 Error: Access to this API has been restricted
-    at stat (node:internal/modules/cjs/loader:162:18)
-    at Module._findPath (node:internal/modules/cjs/loader:640:16)
-    at resolveMainPath (node:internal/modules/run_main:15:25)
-    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:53:24)
     at node:internal/main/run_main_module:23:47 {
   code: 'ERR_ACCESS_DENIED',
   permission: 'FileSystemRead',
-  resource: '/Users/rafaelgss/repos/os/node/t.js'
+  resource: '/Users/rafaelgss/repos/os/node/index.js'
 }
 ```
 
@@ -267,8 +255,6 @@ When passing a single flag with a comma a warning will be displayed.
 
 Examples can be found in the [File System Permissions][] documentation.
 
-Relative paths are NOT supported through the CLI flag.
-
 ### `--allow-wasi`
 
 <!-- YAML
@@ -300,18 +286,8 @@ new WASI({
 
 ```console
 $ node --experimental-permission --allow-fs-read=* index.js
-node:wasi:99
-    const wrap = new _WASI(args, env, preopens, stdio);
-                 ^
 
 Error: Access to this API has been restricted
-    at new WASI (node:wasi:99:18)
-    at Object.<anonymous> (/home/index.js:3:1)
-    at Module._compile (node:internal/modules/cjs/loader:1476:14)
-    at Module._extensions..js (node:internal/modules/cjs/loader:1555:10)
-    at Module.load (node:internal/modules/cjs/loader:1288:32)
-    at Module._load (node:internal/modules/cjs/loader:1104:12)
-    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:191:14)
     at node:internal/main/run_main_module:30:49 {
   code: 'ERR_ACCESS_DENIED',
   permission: 'WASI',
@@ -341,18 +317,8 @@ new Worker(__filename);
 
 ```console
 $ node --experimental-permission --allow-fs-read=* index.js
-node:internal/worker:188
-    this[kHandle] = new WorkerImpl(url,
-                    ^
 
 Error: Access to this API has been restricted
-    at new Worker (node:internal/worker:188:21)
-    at Object.<anonymous> (/home/index.js.js:3:1)
-    at Module._compile (node:internal/modules/cjs/loader:1120:14)
-    at Module._extensions..js (node:internal/modules/cjs/loader:1174:10)
-    at Module.load (node:internal/modules/cjs/loader:998:32)
-    at Module._load (node:internal/modules/cjs/loader:839:12)
-    at Function.executeUserEntryPoint [as runMain] (node:internal/modules/run_main:81:12)
     at node:internal/main/run_main_module:17:47 {
   code: 'ERR_ACCESS_DENIED',
   permission: 'WorkerThreads'
@@ -1092,14 +1058,6 @@ added:
 
 Use this flag to enable [ShadowRealm][] support.
 
-### `--experimental-sqlite`
-
-<!-- YAML
-added: v22.5.0
--->
-
-Enable the experimental [`node:sqlite`][] module.
-
 ### `--experimental-strip-types`
 
 <!-- YAML
@@ -1155,16 +1113,6 @@ added:
 > Stability: 1.0 - Early development
 
 Enable module mocking in the test runner.
-
-### `--experimental-test-snapshots`
-
-<!-- YAML
-added: v22.3.0
--->
-
-> Stability: 1.0 - Early development
-
-Enable [snapshot testing][] in the test runner.
 
 ### `--experimental-vm-modules`
 
@@ -1720,6 +1668,18 @@ Disable support for loading a synchronous ES module graph in `require()`.
 
 See [Loading ECMAScript modules using `require()`][].
 
+### `--no-experimental-sqlite`
+
+<!-- YAML
+added: v22.5.0
+changes:
+  - version: REPLACEME
+    pr-url: https://github.com/nodejs/node/pull/55890
+    description: SQLite is unflagged but still experimental.
+-->
+
+Disable the experimental [`node:sqlite`][] module.
+
 ### `--no-experimental-websocket`
 
 <!-- YAML
@@ -1995,7 +1955,7 @@ Location at which the report will be generated.
 ### `--report-exclude-env`
 
 <!-- YAML
-added: REPLACEME
+added: v23.3.0
 -->
 
 When `--report-exclude-env` is passed the diagnostic report generated will not
@@ -2495,13 +2455,13 @@ subtests inherit this value from their parent. The default value is `Infinity`.
 
 <!-- YAML
 added: v22.3.0
+changes:
+  - version: REPLACEME
+    pr-url: https://github.com/nodejs/node/pull/55897
+    description: Snapsnot testing is no longer experimental.
 -->
 
-> Stability: 1.0 - Early development
-
 Regenerates the snapshot files used by the test runner for [snapshot testing][].
-Node.js must be started with the `--experimental-test-snapshots` flag in order
-to use this functionality.
 
 ### `--throw-deprecation`
 
@@ -2610,6 +2570,45 @@ added: v0.8.0
 -->
 
 Print stack traces for deprecations.
+
+### `--trace-env`
+
+<!-- YAML
+added: REPLACEME
+-->
+
+Print information about any access to environment variables done in the current Node.js
+instance to stderr, including:
+
+* The environment variable reads that Node.js does internally.
+* Writes in the form of `process.env.KEY = "SOME VALUE"`.
+* Reads in the form of `process.env.KEY`.
+* Definitions in the form of `Object.defineProperty(process.env, 'KEY', {...})`.
+* Queries in the form of `Object.hasOwn(process.env, 'KEY')`,
+  `process.env.hasOwnProperty('KEY')` or `'KEY' in process.env`.
+* Deletions in the form of `delete process.env.KEY`.
+* Enumerations inf the form of `...process.env` or `Object.keys(process.env)`.
+
+Only the names of the environment variables being accessed are printed. The values are not printed.
+
+To print the stack trace of the access, use `--trace-env-js-stack` and/or
+`--trace-env-native-stack`.
+
+### `--trace-env-js-stack`
+
+<!-- YAML
+added: REPLACEME
+-->
+
+In addition to what `--trace-env` does, this prints the JavaScript stack trace of the access.
+
+### `--trace-env-native-stack`
+
+<!-- YAML
+added: REPLACEME
+-->
+
+In addition to what `--trace-env` does, this prints the native stack trace of the access.
 
 ### `--trace-event-categories`
 
@@ -3070,7 +3069,6 @@ one is included in the list below.
 * `--experimental-require-module`
 * `--experimental-shadow-realm`
 * `--experimental-specifier-resolution`
-* `--experimental-sqlite`
 * `--experimental-strip-types`
 * `--experimental-top-level-await`
 * `--experimental-transform-types`
@@ -3107,6 +3105,7 @@ one is included in the list below.
 * `--no-deprecation`
 * `--no-experimental-global-navigator`
 * `--no-experimental-repl-await`
+* `--no-experimental-sqlite`
 * `--no-experimental-websocket`
 * `--no-extra-info-on-fatal-exception`
 * `--no-force-async-hooks-checks`
@@ -3157,6 +3156,9 @@ one is included in the list below.
 * `--tls-min-v1.2`
 * `--tls-min-v1.3`
 * `--trace-deprecation`
+* `--trace-env-js-stack`
+* `--trace-env-native-stack`
+* `--trace-env`
 * `--trace-event-categories`
 * `--trace-event-file-pattern`
 * `--trace-events-enabled`
@@ -3477,8 +3479,10 @@ reason any of these APIs takes a long time, other (seemingly unrelated) APIs
 that run in libuv's threadpool will experience degraded performance. In order to
 mitigate this issue, one potential solution is to increase the size of libuv's
 threadpool by setting the `'UV_THREADPOOL_SIZE'` environment variable to a value
-greater than `4` (its current default value). For more information, see the
-[libuv threadpool documentation][].
+greater than `4` (its current default value). However, setting this from inside
+the process using `process.env.UV_THREADPOOL_SIZE=size` is not guranteed to work
+as the threadpool would have been created as part of the runtime initialisation
+much before user code is run. For more information, see the [libuv threadpool documentation][].
 
 ## Useful V8 options
 
@@ -3553,8 +3557,8 @@ improvement depends on your workload (see [#42511][]).
 
 The default value depends on the memory limit. For example, on 64-bit systems
 with a memory limit of 512 MiB, the max size of a semi-space defaults to 1 MiB.
-On 64-bit systems with a memory limit of 2 GiB, the max size of a semi-space
-defaults to 16 MiB.
+For memory limits up to and including 2GiB, the default max size of a
+semi-space will be less than 16 MiB on 64-bit systems.
 
 To get the best configuration for your application, you should try different
 max-semi-space-size values when running benchmarks for your application.

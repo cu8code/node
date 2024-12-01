@@ -28,7 +28,7 @@ performance.measure('Start to Now');
 
 performance.mark('A');
 (async function doSomeLongRunningProcess() {
-  await new Promise(r => setTimeout(r, 5000));
+  await new Promise((r) => setTimeout(r, 5000));
   performance.measure('A to Now', 'A');
 
   performance.mark('B');
@@ -1338,6 +1338,14 @@ obs.observe({ type: 'mark' });
 for (let n = 0; n < 3; n++)
   performance.mark(`test${n}`);
 ```
+
+### `performanceObserver.takeRecords()`
+
+<!-- YAML
+added: v16.0.0
+-->
+
+* Returns: {PerformanceEntry\[]} Current list of entries stored in the performance observer, emptying it out.
 
 ## Class: `PerformanceObserverEntryList`
 

@@ -427,7 +427,8 @@ EnvironmentOptionsParser::EnvironmentOptionsParser() {
   AddOption("--experimental-sqlite",
             "experimental node:sqlite module",
             &EnvironmentOptions::experimental_sqlite,
-            kAllowedInEnvvar);
+            kAllowedInEnvvar,
+            true);
   AddOption("--experimental-webstorage",
             "experimental Web Storage API",
             &EnvironmentOptions::experimental_webstorage,
@@ -691,9 +692,7 @@ EnvironmentOptionsParser::EnvironmentOptionsParser() {
   AddOption("--experimental-test-module-mocks",
             "enable module mocking in the test runner",
             &EnvironmentOptions::test_runner_module_mocks);
-  AddOption("--experimental-test-snapshots",
-            "enable snapshot testing in the test runner",
-            &EnvironmentOptions::test_runner_snapshots);
+  AddOption("--experimental-test-snapshots", "", NoOp{});
   AddOption("--test-name-pattern",
             "run tests whose name matches this regular expression",
             &EnvironmentOptions::test_name_pattern,
@@ -761,6 +760,24 @@ EnvironmentOptionsParser::EnvironmentOptionsParser() {
             "show stack traces on promise initialization and resolution",
             &EnvironmentOptions::trace_promises,
             kAllowedInEnvvar);
+
+  AddOption("--trace-env",
+            "Print accesses to the environment variables",
+            &EnvironmentOptions::trace_env,
+            kAllowedInEnvvar);
+  Implies("--trace-env-js-stack", "--trace-env");
+  Implies("--trace-env-native-stack", "--trace-env");
+  AddOption("--trace-env-js-stack",
+            "Print accesses to the environment variables and the JavaScript "
+            "stack trace",
+            &EnvironmentOptions::trace_env_js_stack,
+            kAllowedInEnvvar);
+  AddOption(
+      "--trace-env-native-stack",
+      "Print accesses to the environment variables and the native stack trace",
+      &EnvironmentOptions::trace_env_native_stack,
+      kAllowedInEnvvar);
+
   AddOption("--experimental-default-type",
             "set module system to use by default",
             &EnvironmentOptions::type,

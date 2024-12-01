@@ -371,7 +371,7 @@ util.formatWithOptions({ colors: true }, 'See object %O', { foo: 42 });
 <!-- YAML
 added: v22.9.0
 changes:
-  - version: REPLACEME
+  - version: v23.3.0
     pr-url: https://github.com/nodejs/node/pull/55626
     description: The API is renamed from `util.getCallSite` to `util.getCallSites()`.
 -->
@@ -513,7 +513,7 @@ The mapping between error codes and string messages is platform-dependent.
 ```js
 fs.access('file/that/does/not/exist', (err) => {
   const name = util.getSystemErrorMessage(err.errno);
-  console.error(name);  // no such file or directory
+  console.error(name);  // No such file or directory
 });
 ```
 
@@ -1998,6 +1998,10 @@ The full list of formats can be found in [modifiers][].
 
 <!-- YAML
 added: v8.3.0
+changes:
+  - version: v11.0.0
+    pr-url: https://github.com/nodejs/node/pull/22281
+    description: The class is now available on the global object.
 -->
 
 An implementation of the [WHATWG Encoding Standard][] `TextDecoder` API.
@@ -2075,14 +2079,6 @@ The `'iso-8859-16'` encoding listed in the [WHATWG Encoding Standard][]
 is not supported.
 
 ### `new TextDecoder([encoding[, options]])`
-
-<!-- YAML
-added: v8.3.0
-changes:
-  - version: v11.0.0
-    pr-url: https://github.com/nodejs/node/pull/22281
-    description: The class is now available on the global object.
--->
 
 * `encoding` {string} Identifies the `encoding` that this `TextDecoder` instance
   supports. **Default:** `'utf-8'`.
@@ -2165,6 +2161,10 @@ UTF-8 encodes the `input` string and returns a `Uint8Array` containing the
 encoded bytes.
 
 ### `textEncoder.encodeInto(src, dest)`
+
+<!-- YAML
+added: v12.11.0
+-->
 
 * `src` {string} The text to encode.
 * `dest` {Uint8Array} The array to hold the encode result.
